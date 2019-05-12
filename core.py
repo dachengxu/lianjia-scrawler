@@ -112,7 +112,7 @@ def get_house_percommunity(city, communityname):
     for page in range(total_pages):
         if page > 0:
             url_page = baseUrl + \
-                u"ershoufang/pg%drs%s/" % (page,
+                u"ershoufang/pg%drs%s/" % (page+1,
                                            urllib2.quote(communityname.encode('utf8')))
             source_code = misc.get_source_code(url_page)
             soup = BeautifulSoup(source_code, 'lxml')
@@ -165,7 +165,8 @@ def get_house_percommunity(city, communityname):
             # houseinfo insert into mysql
             data_source.append(info_dict)
             hisprice_data_source.append(
-                {"houseID": info_dict["houseID"], "totalPrice": info_dict["totalPrice"]})
+                {"houseID": info_dict["houseID"], "totalPrice": info_dict["totalPrice"],
+                 "community": info_dict["community"], "unitPrice": info_dict["unitPrice"]})
             # model.Houseinfo.insert(**info_dict).upsert().execute()
             #model.Hisprice.insert(houseID=info_dict['houseID'], totalPrice=info_dict['totalPrice']).upsert().execute()
 
@@ -196,7 +197,7 @@ def get_sell_percommunity(city, communityname):
     for page in range(total_pages):
         if page > 0:
             url_page = baseUrl + \
-                u"chengjiao/pg%drs%s/" % (page,
+                u"chengjiao/pg%drs%s/" % (page+1,
                                           urllib2.quote(communityname.encode('utf8')))
             source_code = misc.get_source_code(url_page)
             soup = BeautifulSoup(source_code, 'lxml')
@@ -257,6 +258,19 @@ def get_sell_percommunity(city, communityname):
                     info_dict.update(
                         {u'dealdate': dealDate.get_text().strip().replace('.', '-')})
 
+                    # 特殊处理带* 的价格
+                    if not info_dict['totalPrice'].isdigit():
+                        detail_source_code = misc.get_source_code(info_dict['link'])
+                        detail_soup = BeautifulSoup(detail_source_code, 'lxml')
+                        try:
+                            info_dict.update(
+                                {u'totalPrice': detail_soup.find("div", {"class": "price"}).find("i").get_text().strip()})
+                            info_dict.update(
+                                {u'unitPrice': detail_soup.find("div", {"class": "price"}).find("b").get_text().strip()})
+                            info_dict.update(
+                                {u'dealdate': detail_soup.find("div", {"class": "house-title"}).find("div", {"class": "wrapper"}).span.get_text().strip().split(' ')[0].replace('.', '-')})
+                        except:
+                            pass
                 except:
                     continue
                 # Sellinfo insert into mysql
@@ -502,7 +516,8 @@ def get_house_perregion(city, district):
                 # Houseinfo insert into mysql
                 data_source.append(info_dict)
                 hisprice_data_source.append(
-                    {"houseID": info_dict["houseID"], "totalPrice": info_dict["totalPrice"]})
+                    {"houseID": info_dict["houseID"], "totalPrice": info_dict["totalPrice"],
+                     "community": info_dict["community"], "unitPrice": info_dict["unitPrice"]})
                 # model.Houseinfo.insert(**info_dict).upsert().execute()
                 #model.Hisprice.insert(houseID=info_dict['houseID'], totalPrice=info_dict['totalPrice']).upsert().execute()
 
