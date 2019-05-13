@@ -1,7 +1,8 @@
-from peewee import *
 import datetime
-import settings
 
+from peewee import *
+
+import settings
 
 if settings.DBENGINE.lower() == 'mysql':
     database = MySQLDatabase(

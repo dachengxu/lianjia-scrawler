@@ -1,13 +1,10 @@
 #! usr/bin/python #coding=utf-8
-import os
-import requests
-from bs4 import BeautifulSoup
-from datetime import timedelta, date
-from peewee import *
-import model
-import time
 import logging
-import misc
+import time
+
+from bs4 import BeautifulSoup
+
+from scrawler import misc, model
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)

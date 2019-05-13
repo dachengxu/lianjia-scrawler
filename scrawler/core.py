@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from bs4 import BeautifulSoup
-import model
-import misc
-import time
 import datetime
-import urllib2
 import logging
+import time
+import urllib2
+
+from bs4 import BeautifulSoup
+
+import misc
+import model
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)

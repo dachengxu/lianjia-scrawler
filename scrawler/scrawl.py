@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
-import core
-import model
 import settings
+from scrawler import core, model
 
 
 def get_communitylist(city):

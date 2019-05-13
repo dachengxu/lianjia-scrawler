@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from bs4 import BeautifulSoup
-import settings
-import model
-import misc
-import time
-import datetime
-import urllib2
 import logging
+import time
+import urllib2
+
+from bs4 import BeautifulSoup
+
+import settings
+from scrawler import misc, model
 
 logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
