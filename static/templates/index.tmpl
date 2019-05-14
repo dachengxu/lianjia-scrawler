@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>链家房源信息</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, td {
+            border: 1px solid #000;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+{% import 'table.tmpl' as tt %}
+
+{{ tt.tabletpl(description, rows)}}
+
+</body>
+</html>

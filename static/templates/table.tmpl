@@ -1,0 +1,27 @@
+
+{% macro tabletpl(description, rows) -%}
+    <table border="1">
+        {% if description %}
+            <tr>
+                {% for row in description %}
+                    <th>{{ row[0] }}</th>
+                {% endfor %}
+            </tr>
+        {% endif %}
+
+        {% if rows %}
+            {% for row in rows %}
+                <tr>
+                    {% for elem in row %}
+                        {% if elem is string and elem is startswith('http') %}
+                            <td> <a href={{ elem }} target="_blank">go...</a> </td>
+                        {% else %}
+                            <td> {{ elem }} </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        {% endif %}
+
+    </table>
+{%- endmacro %}
