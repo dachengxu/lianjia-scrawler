@@ -12,11 +12,11 @@
         {% if rows %}
             {% for row in rows %}
                 <tr>
-                    {% for elem in row %}
-                        {% if elem is string and elem is startswith('http') %}
-                            <td> <a href={{ elem }} target="_blank">go...</a> </td>
+                    {% for item in row %}
+                        {% if item is string and item is startswith('http') %}
+                            <td> <a href={{ item }} target="_blank">go...</a> </td>
                         {% else %}
-                            <td> {{ elem }} </td>
+                            <td> {{ item }} </td>
                         {% endif %}
                     {% endfor %}
                 </tr>

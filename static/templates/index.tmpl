@@ -11,11 +11,38 @@
             white-space: nowrap;
         }
     </style>
+
+    <SCRIPT language=javascript>
+        function communitySelect(sobj) {
+            var docurl = sobj.options[sobj.selectedIndex].value;
+            if (docurl != "") {
+                window.location.href = docurl
+            }
+        }
+    </SCRIPT>
 </head>
 <body>
+
+<h2>小区：
+    <select onchange=communitySelect(this) name="select">
+        {% if communitys %}
+            <tr>
+                {% for community in communitys %}
+                    <option value="/xiaoqu/{{ community }}">{{ community }}</option>
+                {% endfor %}
+            </tr>
+        {% endif %}
+    </select>
+</h2>
+
 {% import 'table.tmpl' as tt %}
 
-{{ tt.tabletpl(description, rows)}}
+{% for data in datas %}
+    <h2>{{ data[0] }}, 共{{ data[2]|length }}条</h2>
+
+    {{ tt.tabletpl(data[1], data[2]) }}
+{% endfor %}
+
 
 </body>
 </html>
