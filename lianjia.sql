@@ -23,16 +23,22 @@ SELECT
     LEFT(floor, 1) AS floor,
     ROUND(totalPrice * 10000 / unitPrice) AS square,
     decoration,
-    case 
-		when locate("车位", title) > 0 then 1 
-		else 0
-	end as '车位',
-    totalPrice, unitPrice, link
+    CASE
+        WHEN LOCATE('车位', title) > 0 THEN 1
+        ELSE 0
+    END AS '车位',
+    totalPrice,
+    unitPrice,
+    link
 FROM
     ershoufang.houseinfo
 WHERE
     community = @communtiy
         AND totalPrice * 10000 / unitPrice BETWEEN 80 AND 100
+        AND SUBSTR(validdate, 1, 10) IN (SELECT 
+            SUBSTR(MAX(validdate), 1, 10)
+        FROM
+            ershoufang.houseinfo)
 ORDER BY square , decoration DESC , (unitPrice + 0);
 
 -- 价格发生变动的房源信息

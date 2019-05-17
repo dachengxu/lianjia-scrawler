@@ -82,6 +82,10 @@ def get_houseinfo_by_square(community, min_square = 80, max_square = 100):
         WHERE
             community = %s
                 AND totalPrice * 10000 / unitPrice BETWEEN %s AND %s
+                AND SUBSTR(validdate, 1, 10) IN (SELECT 
+                        SUBSTR(MAX(validdate), 1, 10)
+                    FROM
+                        ershoufang.houseinfo)
         ORDER BY square , decoration DESC , (unitPrice + 0);
     '''
     cursor = database.execute_sql(sql, (community, min_square, max_square))
@@ -105,6 +109,7 @@ def get_houseinfo_changed(community):
     '''
     cursor = database.execute_sql(sql, (community,))
     return u'价格变动的房源', cursor.description, cursor.fetchall()
+
 
 def get_houseinfo_sold(community):
     sql = u'''
