@@ -1,3 +1,12 @@
+# 说明
+- fix bug
+- 私人定制
+    - 80-100平的房源
+    - 价格变动的房源 
+    - 下架房源 (最新参考成交价)
+    - 已售房源 (查看历史成交价)
+- 利用jinjia定制了一个简单的页面方便查看
+
 # lianjia-scrawler
 [![Licenses](https://img.shields.io/badge/license-bsd-orange.svg)](https://opensource.org/licenses/BSD-3-Clause)
 + 该项目提供一个链家网全国房源爬虫工具，数据存储目前支持Mysql,Sqlite和Postgres。非常方便转化成csv等格式文件。
