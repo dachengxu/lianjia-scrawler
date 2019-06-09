@@ -53,19 +53,24 @@ def show_community(community):
 
 def get_houseinfo_xiajia(community):
     sql = u'''
-        SELECT * FROM ershoufang.houseinfo
-        WHERE community = %s AND
+        SELECT 
+            h.*
+        FROM
+            ershoufang.houseinfo h
+                LEFT JOIN
+            ershoufang.sellinfo s ON h.houseId = s.houseId
+        WHERE h.community = %s AND s.houseId is NULL AND 
             SUBSTR(validdate, 1, 10) NOT IN (SELECT 
                     SUBSTR(MAX(validdate), 1, 10)
                 FROM
                     ershoufang.houseinfo)
-        ORDER BY validdate
+        ORDER BY validdate desc;
     '''
     cursor = database.execute_sql(sql, (community,))
     return u'下架房源', cursor.description, cursor.fetchall()
 
 
-def get_houseinfo_by_square(community, min_square = 80, max_square = 100):
+def get_houseinfo_by_square(community, min_square = 80, max_square = 200):
     sql = u'''
         SELECT houseID,
             housetype,
@@ -105,7 +110,11 @@ def get_houseinfo_changed(community):
             GROUP BY houseId
             HAVING COUNT(*) > 1) t
                 LEFT JOIN
-            houseinfo h ON t.houseId = h.houseId;
+            houseinfo h ON t.houseId = h.houseId
+        WHERE SUBSTR(validdate, 1, 10) IN (SELECT 
+                    SUBSTR(MAX(validdate), 1, 10)
+                FROM
+                    ershoufang.houseinfo);
     '''
     cursor = database.execute_sql(sql, (community,))
     return u'价格变动的房源', cursor.description, cursor.fetchall()
@@ -113,10 +122,12 @@ def get_houseinfo_changed(community):
 
 def get_houseinfo_sold(community):
     sql = u'''
-        SELECT * FROM ershoufang.sellinfo where community = %s order by dealdate desc;
+        SELECT * FROM ershoufang.sellinfo 
+        where community = %s and DATE_SUB(CURDATE(), INTERVAL 2 MONTH) <= date(dealdate)
+        order by dealdate desc;
     '''
     cursor = database.execute_sql(sql, (community,))
-    return u'已售房源信息', cursor.description, cursor.fetchall()
+    return u'近2月已售房源信息', cursor.description, cursor.fetchall()
 
 
 

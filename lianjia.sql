@@ -8,8 +8,13 @@ SELECT * FROM ershoufang.houseinfo
 where community = @communtiy order by decoration desc,(unitPrice+0);
 
 -- 下架房源信息
-SELECT * FROM ershoufang.houseinfo
-WHERE
+SELECT 
+    *
+FROM
+    ershoufang.houseinfo h
+        LEFT JOIN
+    ershoufang.sellinfo s ON h.houseId = s.houseId
+WHERE s.houseId is not NULL and 
     SUBSTR(validdate, 1, 10) NOT IN (SELECT 
             SUBSTR(MAX(validdate), 1, 10)
         FROM
